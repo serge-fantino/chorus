@@ -88,4 +88,10 @@ describe("chorus.models.OracleDataSource", function() {
             });
         });
     });
+
+    describe('#schemas', function(){
+        it('has the right url', function(){
+            expect(this.instance.schemas().url()).toHaveUrlPath('/data_sources/' + this.instance.id + '/schemas');
+        });
+    });
 });

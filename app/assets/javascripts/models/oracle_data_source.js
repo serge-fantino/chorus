@@ -34,5 +34,11 @@ chorus.models.OracleDataSource = chorus.models.DataSource.extend({
         "port": "instances.dialog.port",
         "dbName": "instances.dialog.database_name",
         "description": "instances.dialog.description"
+    },
+
+    schemas: function(){
+        var collection = new chorus.collections.SchemaSet();
+        collection.urlTemplate = "data_sources/"+this.get("id")+"/schemas";
+        return collection;
     }
 });

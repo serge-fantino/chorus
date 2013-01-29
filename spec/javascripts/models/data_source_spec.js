@@ -11,12 +11,6 @@ describe('chorus.models.DataSource', function() {
         expect(this.model.url()).toHaveUrlPath('/data_sources/');
     });
 
-    describe('#showUrl', function(){
-            it('has the right url', function() {
-            expect(this.model.showUrl()).toEqual('#/data_sources/' + this.model.id + '/databases');
-        });
-    });
-
     describe('#canHaveIndividualAccounts', function(){
         it('is true for greenplum data sources', function(){
             var gpdbDataSource = rspecFixtures.gpdbDataSource();

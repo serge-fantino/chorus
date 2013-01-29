@@ -2,7 +2,7 @@
     var CLASS_MAP = {
         "actor": "User",
         "dataset": "WorkspaceDataset",
-        'dataSource': 'DataSource',
+        'dataSource': 'DynamicDataSource',
         "gpdbDataSource": "GpdbDataSource",
         "gnipInstance": "GnipInstance",
         "newOwner": "User",

@@ -57,7 +57,8 @@
             ["notifications", "NotificationIndex"],
             ["styleguide", "StyleGuide"],
             ["tags", "TagIndex"],
-            ["tags/:name", "TagShow"]
+            ["tags/:name", "TagShow"],
+            ["data_sources/:id/schemas", "OracleSchemaIndex"]
         ],
 
         initialize:function (app) {
