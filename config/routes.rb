@@ -34,7 +34,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :databases, :only => [:show], :controller => 'instance_databases' do
-    resources :schemas, :only => [:index]
+    resources :schemas, :only => [:index], :controller => 'database_schemas'
   end
 
   resources :schemas, :only => [:show] do
