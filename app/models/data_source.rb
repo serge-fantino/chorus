@@ -16,8 +16,6 @@ class DataSource < ActiveRecord::Base
   after_create :create_instance_created_event, :if => :current_user
   validates_with DataSourceNameValidator
 
-  def refresh_databases_later
-  end
 
   def valid_db_credentials?(account)
     success = true
@@ -35,6 +33,10 @@ class DataSource < ActiveRecord::Base
           owned: user.id,
           with_membership: user.instance_accounts.pluck(:instance_id)
     )
+  end
+
+  def self.refresh_databases instance_id
+    find(instance_id).refresh_databases
   end
 
   private

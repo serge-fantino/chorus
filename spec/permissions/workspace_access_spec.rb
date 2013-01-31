@@ -107,7 +107,7 @@ describe WorkspaceAccess do
       context "with an updated sandbox" do
         context "when user can show_contents? of the dataset instance" do
           it "allows update" do
-            schema = gpdb_schemas(:other_schema)
+            schema = schemas(:other_schema)
             any_instance_of(GpdbDataSourceAccess) do |instance_access|
               mock(instance_access).show_contents?(schema.gpdb_data_source) { true }
             end
@@ -118,7 +118,7 @@ describe WorkspaceAccess do
 
         context "when user can not show_contents? of the dataset instance" do
           it "does not allow update" do
-            schema = gpdb_schemas(:other_schema)
+            schema = schemas(:other_schema)
             any_instance_of(GpdbDataSourceAccess) do |instance_access|
               mock(instance_access).show_contents?(schema.gpdb_data_source) { false }
             end

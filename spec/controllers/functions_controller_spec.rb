@@ -11,7 +11,7 @@ describe FunctionsController do
 
   describe "#index" do
     let(:database) { schema.database }
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:functions) { [
           GpdbSchemaFunction.new("a_schema", "ZOO", "sql", "text", [], "{text}", "Hi!!", "awesome"),
           GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", %w{arg1, arg2}, "{text, int4}", "Hi2", "awesome2"),

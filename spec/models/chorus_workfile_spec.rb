@@ -98,7 +98,7 @@ describe ChorusWorkfile do
       end
 
       context "when no execution schema is provided" do
-        let(:sandbox) { gpdb_schemas(:default) }
+        let(:sandbox) { schemas(:default) }
         before do
           workspace.sandbox = sandbox
           workspace.save!
@@ -109,7 +109,7 @@ describe ChorusWorkfile do
       end
 
       context "when execution schema is provided" do
-        let(:execution_schema) { gpdb_schemas(:other_schema) }
+        let(:execution_schema) { schemas(:other_schema) }
 
         it "sets the execution_schema" do
           subject.execution_schema.should == execution_schema

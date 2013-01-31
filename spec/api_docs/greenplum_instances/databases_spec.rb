@@ -8,8 +8,8 @@ resource "Greenplum DB: databases" do
   let(:id) { database.to_param }
   let(:database_id) { database.to_param }
 
-  let(:db_schema_1) { gpdb_schemas(:default) }
-  let(:db_schema_2) { gpdb_schemas(:public) }
+  let(:db_schema_1) { schemas(:default) }
+  let(:db_schema_2) { schemas(:public) }
 
   before do
     log_in owner

@@ -11,7 +11,7 @@ describe OracleImportsController do
       stub(ChorusConfig.instance).server_port { server_port }
     end
 
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:table_name) { "foo" }
     let(:executor) { Object.new }
     let(:host_url) { "test.example.com"}

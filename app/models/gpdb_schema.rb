@@ -1,18 +1,25 @@
 require 'greenplum_connection'
 
-class GpdbSchema < ActiveRecord::Base
+class GpdbSchema < Schema
   include Stale
 
-  attr_accessible :name
+  attr_accessible :database
+
+  belongs_to :database, {
+      :polymorphic => true,
+      :foreign_key => 'parent_id',
+      :foreign_type => 'parent_type',
+      :class_name => 'GpdbDatabase'
+  }
+
   has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
-  belongs_to :database, :class_name => 'GpdbDatabase'
   has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
   has_many :active_tables_and_views, :foreign_key => :schema_id, :class_name => 'Dataset',
            :conditions => ['type != :chorus_view AND stale_at IS NULL', :chorus_view => 'ChorusView']
 
   validates :name,
             :presence => true,
-            :uniqueness => { :scope => :database_id },
+            :uniqueness => { :scope => [:parent_type, :parent_id] },
             :format => /^[^\/?&]*$/
 
   delegate :gpdb_data_source, :account_for_user!, :to => :database
@@ -30,8 +37,8 @@ class GpdbSchema < ActiveRecord::Base
       schema.save!
       Dataset.refresh(account, schema, options) if options[:refresh_all]
       found_schemas << schema
-      rescue ActiveRecord::StatementInvalid => e
-        Chorus.log_error "Could not refresh schema #{row['schema_name']}: #{e.message} on #{e.backtrace[0]}"
+      #rescue ActiveRecord::StatementInvalid => e
+      #  Chorus.log_error "Could not refresh schema #{row['schema_name']}: #{e.message} on #{e.backtrace[0]}"
       end
     end
 

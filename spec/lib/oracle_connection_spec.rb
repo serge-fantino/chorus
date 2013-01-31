@@ -11,6 +11,7 @@ describe OracleConnection, :oracle_integration do
   let(:host) { InstanceIntegration.oracle_hostname }
   let(:port) { InstanceIntegration.oracle_port }
   let(:db_url) { "jdbc:oracle:thin:#{username}/#{password}@//#{host}:#{port}/#{db_name}" }
+  let(:db) { Sequel.connect(db_url) }
 
   let(:connection) { OracleConnection.new(
       :host => host,
@@ -19,6 +20,11 @@ describe OracleConnection, :oracle_integration do
       :port => port,
       :database => db_name
   ) }
+
+  before do
+    stub.proxy(Sequel).connect.with_any_args
+  end
+
   describe "#connect!" do
     it "should connect" do
       mock.proxy(Sequel).connect(db_url, :test => true)
@@ -42,6 +48,26 @@ describe OracleConnection, :oracle_integration do
       connection.disconnect
       connection.should_not be_connected
     end
+  end
+
+  describe "#schemas" do
+    let(:schema_blacklist) {
+      ["OBE", "SCOTT", "DIP", "ORACLE_OCM", "XS$NULL", "MDDATA", "SPATIAL_WFS_ADMIN_USR", "SPATIAL_CSW_ADMIN_USR", "TESTUSER2", "IX", "SH", "PM", "BI", "DEMO", "HR1", "OE1", "XDBPM", "XDBEXT", "XFILES", "APEX_PUBLIC_USER", "TIMESTEN", "CACHEADM", "PLS", "TTHR", "APEX_REST_PUBLIC_USER", "APEX_LISTENER", "OE", "HR", "HR_TRIG", "PHPDEMO", "APPQOSSYS", "WMSYS", "OWBSYS_AUDIT", "OWBSYS", "SYSMAN", "EXFSYS", "CTXSYS", "XDB", "ANONYMOUS", "OLAPSYS", "APEX_040200", "ORDSYS", "ORDDATA", "ORDPLUGINS", "FLOWS_FILES", "SI_INFORMTN_SCHEMA", "MDSYS", "DBSNMP", "OUTLN", "MGMT_VIEW", "SYSTEM", "SYS"]
+    }
+
+    let(:schema_list_sql) {
+      blacklist = schema_blacklist.join("', '")
+      <<-SQL
+        SELECT DISTINCT OWNER as name
+        FROM ALL_OBJECTS
+        WHERE OBJECT_TYPE IN ('TABLE', 'VIEW') AND OWNER NOT IN ('#{blacklist}')
+      SQL
+    }
+
+    let(:expected) { db.fetch(schema_list_sql).all.collect { |row| row[:name] } }
+    let(:subject) { connection.schemas }
+
+    it_should_behave_like "a well behaved database query"
   end
 
   describe "#version" do

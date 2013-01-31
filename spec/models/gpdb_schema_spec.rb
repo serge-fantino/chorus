@@ -6,6 +6,16 @@ describe GpdbSchema do
     it { should have_many(:datasets) }
     it { should have_many(:workspaces) }
 
+    describe "#database" do
+      let(:schema) {
+         GpdbSchema.create!(:name => 'test_schema', :database => gpdb_databases(:default))
+      }
+
+      it "returns the schemas parent" do
+        schema.reload.database.should == gpdb_databases(:default)
+      end
+    end
+
     describe 'validations' do
       it 'has a valid factory' do
         FactoryGirl.build(:gpdb_schema).should be_valid
@@ -22,7 +32,7 @@ describe GpdbSchema do
       end
 
       describe 'name uniqueness' do
-        let(:existing) { gpdb_schemas(:default) }
+        let(:existing) { schemas(:default) }
 
         context 'in the same db' do
           it 'does not allow two databases with the same name' do
@@ -46,7 +56,7 @@ describe GpdbSchema do
 
     describe "cascading deletes" do
       it "deletes its datasets when it is destroyed" do
-        schema = gpdb_schemas(:default)
+        schema = schemas(:default)
 
         expect {
           schema.destroy
@@ -54,7 +64,7 @@ describe GpdbSchema do
       end
 
       it "nullifies its sandbox association in workspaces" do
-        schema = gpdb_schemas(:searchquery_schema)
+        schema = schemas(:searchquery_schema)
         workspace = FactoryGirl.create(:workspace, :sandbox => schema)
 
         expect {
@@ -69,7 +79,7 @@ describe GpdbSchema do
   describe '#accessible_to' do
     let(:gpdb_data_source) { data_sources(:owners) }
     let(:account) { gpdb_data_source.owner_account }
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
 
     it 'returns true if the user can access the gpdb instance' do
       owner = account.owner
@@ -88,7 +98,7 @@ describe GpdbSchema do
       stub(schema.database).connect_with(account) { connection }
       schema.database
     end
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:settings) do
       {
           :host => gpdb_data_source.host,
@@ -195,7 +205,7 @@ describe GpdbSchema do
   end
 
   describe ".find_and_verify_in_source" do
-    let(:schema) { gpdb_schemas(:public) }
+    let(:schema) { schemas(:public) }
     let(:database) { schema.database }
     let(:user) { users(:owner) }
     let(:connection) { Object.new }
@@ -229,7 +239,7 @@ describe GpdbSchema do
   end
 
   describe "#stored_functions" do
-    let(:schema) { gpdb_schemas(:public) }
+    let(:schema) { schemas(:public) }
     let(:account) { schema.database.gpdb_data_source.owner_account }
     let(:connection) { Object.new }
 
@@ -265,7 +275,7 @@ describe GpdbSchema do
   end
 
   describe "#disk_space_used" do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:account) { instance_accounts(:unauthorized) }
     let(:connection) { Object.new }
     let(:disk_space_used) { 12345 }
@@ -299,7 +309,7 @@ describe GpdbSchema do
   end
 
   describe "callbacks" do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
 
     describe "before_save" do
       describe "#mark_datasets_as_stale" do
@@ -314,7 +324,7 @@ describe GpdbSchema do
   end
 
   describe "#connect_with" do
-    let(:schema) { gpdb_schemas(:public) }
+    let(:schema) { schemas(:public) }
     let(:account) { instance_accounts(:unauthorized) }
 
     it "should create a Greenplum SchemaConnection" do
@@ -332,7 +342,7 @@ describe GpdbSchema do
   end
 
   describe '#active_tables_and_views' do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
 
     it 'does not include chorus views' do
       cv = nil

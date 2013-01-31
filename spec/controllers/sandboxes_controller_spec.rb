@@ -4,7 +4,7 @@ describe SandboxesController do
   ignore_authorization!
 
   let(:owner) { gpdb_data_source.owner }
-  let(:sandbox) { gpdb_schemas(:default) }
+  let(:sandbox) { schemas(:default) }
   let(:database) { sandbox.database }
   let(:gpdb_data_source) { database.gpdb_data_source }
   let(:workspace) { workspaces(:no_sandbox) }

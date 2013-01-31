@@ -6,6 +6,8 @@ class OracleDataSource < DataSource
 
   before_validation :build_instance_account_for_owner, :on => :create
 
+  has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
+
   def connect_with(account)
     OracleConnection.new(
         :username => account.db_username,
@@ -14,6 +16,28 @@ class OracleDataSource < DataSource
         :port => port,
         :database => db_name
     )
+  end
+
+  def refresh_databases_later
+
+  end
+
+  def refresh_schemas
+    actual_schema_names = connect_with(owner_account).schemas.map { |schema|
+      schema[:name]
+    }
+
+    schemas.each do |schema|
+      unless actual_schema_names.delete schema.name
+        schema.destroy
+      end
+    end
+
+    actual_schema_names.each do |name|
+      schemas.create(:name => name)
+    end
+
+    schemas
   end
 
   private

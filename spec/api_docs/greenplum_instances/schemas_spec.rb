@@ -6,7 +6,7 @@ resource "Greenplum DB: schemas" do
   let!(:database) { gpdb_databases(:default) }
   let!(:owner_account) { owned_instance.account_for_user(owner) }
 
-  let(:db_schema) { gpdb_schemas(:default)}
+  let(:db_schema) { schemas(:default)}
   let(:id) { db_schema.to_param }
   let(:schema_id) { db_schema.to_param }
   let(:table) { datasets(:table) }

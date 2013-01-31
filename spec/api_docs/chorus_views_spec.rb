@@ -91,7 +91,7 @@ resource "Chorus Views" do
 
     required_parameters :schema_id, :query, :check_id
 
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:schema_id) { schema.id }
     let(:query) { "SELECT * FROM table;" }
     let(:check_id) {'0.43214321' }

@@ -502,6 +502,10 @@ FixtureBuilder.configure do |fbuilder|
       @real = FactoryGirl.create(:hadoop_instance, :owner => owner, :host => InstanceIntegration.instance_config_for_hadoop['host'], :port => InstanceIntegration.instance_config_for_hadoop['port'])
     end
 
+    if ENV['ORACLE_HOST']
+      FactoryGirl.create(:oracle_data_source, :owner => owner, :host => InstanceIntegration.oracle_hostname, :port => InstanceIntegration.oracle_port, :db_name => InstanceIntegration.oracle_db_name, :db_username => InstanceIntegration.oracle_username, :db_password => InstanceIntegration.oracle_password)
+    end
+
     #Notification
     notes = Events::NoteOnGreenplumInstance.by(owner).order(:id)
     @notification1 = Notification.create!({:recipient => owner, :event => notes[0], :comment => second_comment_on_note_on_greenplum}, :without_protection => true)

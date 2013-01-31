@@ -8,7 +8,7 @@ describe StatisticsController do
   end
 
   context "#show" do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:instance_account) { schema.database.gpdb_data_source.owner_account }
     let!(:table) { datasets(:table) }
 

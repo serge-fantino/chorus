@@ -136,6 +136,10 @@ module InstanceIntegration
     GpdbDataSource.find_by_name(greenplum_hostname)
   end
 
+  def self.real_oracle_data_source
+    OracleDataSource.find_by_host(oracle_hostname)
+  end
+
   def self.real_database
     real_gpdb_data_source.databases.find_by_name!(self.database_name)
   end

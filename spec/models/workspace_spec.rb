@@ -501,7 +501,7 @@ describe Workspace do
 
   describe "callbacks" do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
-    let(:sandbox) { gpdb_schemas(:default) }
+    let(:sandbox) { schemas(:default) }
 
     describe "before_save" do
       describe "update_has_added_sandbox" do

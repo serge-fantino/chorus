@@ -48,7 +48,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def disconnect
-    @connection.disconnect
+    @connection.disconnect if @connection
     @connection = nil
   end
 
@@ -59,9 +59,28 @@ class OracleConnection < DataSourceConnection
     result.match(/((\d+\.)+\d+)/)[1]
   end
 
+  def schemas
+    with_connection { @connection.fetch(SCHEMAS_SQL).map { |row| row[:name] } }
+  end
+
   private
+
+  SCHEMAS_SQL = <<-SQL
+      SELECT DISTINCT OWNER as name
+      FROM ALL_OBJECTS
+      WHERE OBJECT_TYPE IN ('TABLE', 'VIEW') AND OWNER NOT IN ('OBE', 'SCOTT', 'DIP', 'ORACLE_OCM', 'XS$NULL', 'MDDATA', 'SPATIAL_WFS_ADMIN_USR', 'SPATIAL_CSW_ADMIN_USR', 'TESTUSER2', 'IX', 'SH', 'PM', 'BI', 'DEMO', 'HR1', 'OE1', 'XDBPM', 'XDBEXT', 'XFILES', 'APEX_PUBLIC_USER', 'TIMESTEN', 'CACHEADM', 'PLS', 'TTHR', 'APEX_REST_PUBLIC_USER', 'APEX_LISTENER', 'OE', 'HR', 'HR_TRIG', 'PHPDEMO', 'APPQOSSYS', 'WMSYS', 'OWBSYS_AUDIT', 'OWBSYS', 'SYSMAN', 'EXFSYS', 'CTXSYS', 'XDB', 'ANONYMOUS', 'OLAPSYS', 'APEX_040200', 'ORDSYS', 'ORDDATA', 'ORDPLUGINS', 'FLOWS_FILES', 'SI_INFORMTN_SCHEMA', 'MDSYS', 'DBSNMP', 'OUTLN', 'MGMT_VIEW', 'SYSTEM', 'SYS')
+  SQL
 
   def db_url
     "jdbc:oracle:thin:#{@settings[:username]}/#{@settings[:password]}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
+  end
+
+  def with_connection(options = {})
+    connect!
+    yield
+  rescue Sequel::DatabaseError => e
+    raise OracleConnection::DatabaseError.new(e)
+  ensure
+    disconnect
   end
 end

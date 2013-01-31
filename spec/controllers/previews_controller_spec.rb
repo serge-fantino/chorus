@@ -68,7 +68,7 @@ describe PreviewsController do
   end
 
   describe "#preview_sql" do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:query) { "SELECT * FROM table;" }
     let(:user) { users(:owner) }
     let(:expected_sql) { "SELECT * FROM (SELECT * FROM table) AS chorus_view;" }

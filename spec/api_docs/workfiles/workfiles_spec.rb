@@ -33,7 +33,7 @@ resource "Workfiles" do
     required_parameters :id
 
     let(:id) { workfile.to_param }
-    let(:"execution_schema[id]") { gpdb_schemas(:default).to_param }
+    let(:"execution_schema[id]") { schemas(:default).to_param }
 
     example_request "Update a workfile" do
       status.should == 200

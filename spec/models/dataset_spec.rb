@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Dataset do
   let(:gpdb_data_source) { data_sources(:owners) }
   let(:account) { gpdb_data_source.owner_account }
-  let(:schema) { gpdb_schemas(:default) }
-  let(:other_schema) { gpdb_schemas(:other_schema) }
+  let(:schema) { schemas(:default) }
+  let(:other_schema) { schemas(:other_schema) }
   let(:dataset) { datasets(:table) }
   let(:source_table) { datasets(:source_table) }
   let(:dataset_view) { datasets(:view) }

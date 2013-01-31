@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WorkspacePresenter, :type => :view do
   let(:user) { users(:owner) }
   let(:archiver) { users(:the_collaborator) }
-  let(:schema) { gpdb_schemas(:default) }
+  let(:schema) { schemas(:default) }
   let(:workspace) { FactoryGirl.build :workspace, :owner => user, :archiver => archiver, :sandbox => schema }
   let(:presenter) { WorkspacePresenter.new(workspace, view, options) }
 

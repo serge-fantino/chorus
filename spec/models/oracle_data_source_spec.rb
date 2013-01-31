@@ -43,4 +43,40 @@ describe OracleDataSource do
       instance.owner_account.should_not be_nil
     end
   end
+
+  describe "#schemas" do
+    let(:new_oracle) { FactoryGirl.create(:oracle_data_source) }
+    let(:schema) { OracleSchema.create!(:name => 'test_schema', :data_source => new_oracle) }
+
+    it "includes schemas" do
+      new_oracle.schemas.should include schema
+    end
+  end
+
+  describe "#refresh_schemas" do
+    let(:instance) { InstanceIntegration.real_oracle_data_source }
+    let(:connection) { Object.new }
+
+    before do
+      mock(OracleConnection).new(anything) {
+        connection
+      }
+
+      mock(connection).schemas { [{:name => "schema_one"}, {:name => "schema_two"}] }
+    end
+
+    it "returns the OracleSchemas in the data source" do
+      schemas = instance.refresh_schemas
+      schemas.map(&:name).should == ["schema_one", "schema_two"]
+      schemas.reject { |schema| schema.class == OracleSchema }.length == 0
+    end
+
+    it "updates the data sources schemas" do
+      instance.schemas.should be_empty
+      instance.schemas.create(:name => 'test_schema')
+      instance.refresh_schemas
+
+      instance.reload.schemas.map(&:name).should == ["schema_one", "schema_two"]
+    end
+  end
 end

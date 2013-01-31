@@ -55,7 +55,7 @@ resource "Workspaces" do
     required_parameters :workspace_id, :'dataset_ids[]'
 
     before do
-      workspace.sandbox = gpdb_schemas(:searchquery_schema)
+      workspace.sandbox = schemas(:searchquery_schema)
       workspace.save
     end
 

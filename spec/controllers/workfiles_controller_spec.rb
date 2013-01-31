@@ -226,7 +226,7 @@ describe WorkfilesController do
   end
 
   describe "#update" do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     let(:options) do
       {
           :id => public_workfile.to_param,
@@ -261,7 +261,7 @@ describe WorkfilesController do
 
     context "as a user who is not a workspace member" do
       let(:user) { users(:not_a_member) }
-      let(:schema) { gpdb_schemas(:other_schema) }
+      let(:schema) { schemas(:other_schema) }
       let(:options) do
         {
             :id => private_workfile.to_param,

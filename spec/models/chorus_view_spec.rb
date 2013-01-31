@@ -97,7 +97,7 @@ describe ChorusView do
     let(:chorus_view) { datasets(:chorus_view) }
 
     it "prevents schema from being updated" do
-      new_schema = gpdb_schemas(:public)
+      new_schema = schemas(:public)
       chorus_view.schema.should_not == new_schema
       chorus_view.schema = new_schema
       chorus_view.schema_id = new_schema.id
@@ -120,7 +120,7 @@ describe ChorusView do
   describe "#preview_sql" do
     let(:chorus_view) do
       ChorusView.new({:name => "query",
-                      :schema => gpdb_schemas(:default),
+                      :schema => schemas(:default),
                       :query => "select 1"},
                      :without_protection => true)
     end
@@ -133,7 +133,7 @@ describe ChorusView do
   describe "#all_row_sql" do
     let(:chorus_view) do
       ChorusView.new({:name => "query",
-                      :schema => gpdb_schemas(:default),
+                      :schema => schemas(:default),
                       :query => "select 1"},
                      :without_protection => true)
     end

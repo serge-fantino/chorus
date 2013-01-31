@@ -26,7 +26,7 @@ describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
     end
 
     context "with several workspaces using the same sandbox" do
-      let(:sandbox) { gpdb_schemas(:default) }
+      let(:sandbox) { schemas(:default) }
       let(:duplicate_sandbox_workspace1) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
       let(:duplicate_sandbox_workspace2) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
 
