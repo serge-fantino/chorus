@@ -81,6 +81,11 @@ FactoryGirl.define do
     refreshed_at Time.current
   end
 
+  factory :oracle_schema do
+    sequence(:name) { |n| "oracle_schema#{n+FACTORY_GIRL_SEQUENCE_OFFSET}"}
+    association :data_source, :factory => :oracle_data_source
+  end
+
   factory :gpdb_table do
     sequence(:name) { |n| "table#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :schema, :factory => :gpdb_schema

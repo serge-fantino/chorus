@@ -26,6 +26,7 @@ Chorus::Application.routes.draw do
       resource :account, :only => [:show, :create, :update, :destroy], :controller => 'account'
       resource :workspace_detail, :only => [:show]
       resources :members, :only => [:index, :create, :update, :destroy]
+      resources :schemas, :only => [:index]
     end
   end
 

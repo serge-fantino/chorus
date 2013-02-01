@@ -23,9 +23,7 @@ class OracleDataSource < DataSource
   end
 
   def refresh_schemas
-    actual_schema_names = connect_with(owner_account).schemas.map { |schema|
-      schema[:name]
-    }
+    actual_schema_names = connect_with(owner_account).schemas
 
     schemas.each do |schema|
       unless actual_schema_names.delete schema.name
