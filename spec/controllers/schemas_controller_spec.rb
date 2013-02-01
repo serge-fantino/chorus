@@ -10,7 +10,7 @@ describe SchemasController do
   end
 
   describe "#show" do
-    let(:schema) { gpdb_schemas(:default) }
+    let(:schema) { schemas(:default) }
     before do
       any_instance_of(GpdbSchema) do |schema|
         stub(schema).verify_in_source { true }

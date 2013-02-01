@@ -54,7 +54,7 @@ describe OracleDataSource do
   end
 
   describe "#refresh_schemas" do
-    let(:instance) { InstanceIntegration.real_oracle_data_source }
+    let(:instance) { data_sources(:oracle) }
     let(:connection) { Object.new }
 
     before do
@@ -62,7 +62,7 @@ describe OracleDataSource do
         connection
       }
 
-      mock(connection).schemas { [{:name => "schema_one"}, {:name => "schema_two"}] }
+      mock(connection).schemas { ["schema_one", "schema_two"] }
     end
 
     it "returns the OracleSchemas in the data source" do

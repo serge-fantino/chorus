@@ -86,4 +86,24 @@ resource "Data sources" do
       status.should == 200
     end
   end
+
+  get "/data_sources/:data_source_id/schemas" do
+
+    parameter :data_source_id, "Data source id"
+
+    let(:data_source) { data_sources(:oracle) }
+    let(:data_source_id) { data_sources(:oracle).to_param }
+    let(:schema_1) { FactoryGirl.create(:oracle_schema) }
+    let(:schema_2) { FactoryGirl.create(:oracle_schema) }
+
+    before do
+      mock(DataSource).find(data_source_id) {
+        mock(data_source).refresh_schemas {[schema_1, schema_2]}
+      }
+    end
+
+    example_request "Get a list schemas belonging to a data source" do
+      status.should == 200
+    end
+  end
 end
